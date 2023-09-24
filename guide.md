@@ -49,6 +49,10 @@ We want to make a client that sends requests to this server that tells it to kil
 
 #### Class
 ```cpp
+public: 
+clear_turtles(const rclcpp::NodeOptions &options);
+
+private:
 // the client to send requests with
 rclcpp::Client<turtlesim::srv::Kill>::SharedPtr client;
 
@@ -138,6 +142,151 @@ constructor()
 [cpp file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/src/turtle_circle_publisher.cpp)
 
 ## P3
+Spawn a turtle named "stationary_turtle" at x = 5, y = 5 
+
+Spawns a second turtle named "moving_turtle" at x = 25, y = 10
 
 ### General idea
+Create a client that sends <turtlesim::srv::Spawn> messages to the turtlesim server
+
+### Code structure
+#### Class
+```cpp
+public:
+    spawn_turtle_nodelet(const rclcpp::NodeOptions &options);
+private:
+    
+    rclcpp::Client<turtlesim::srv::Spawn>::SharedPtr client;
+    rclcpp::TimerBase::SharedPtr timer;
+    
+    static const unsigned int NUMBER_OF_TURTLES{2};
+
+    typedef struct turtle_info {
+        float x_pos;
+        float y_pos;
+        float rad;
+    } turtle_info;
+
+    std::vector<string> turtle_names{"stationary_turtle", "moving_turtle"};
+    std::vector<turtle_info> turtle_bio{{.x_pos = 5, .y_pos = 5, .rad = 0},
+                                        {.x_pos = 25, .y_pos = 10, .rad = 0}};
+
+    // map of turtle name to turtle information
+    std::map<std::string, turtle_info> turtle_description;
+
+    void spawn_turtle();
+```
+
+#### Implementation
+```cpp
+constructor()
+    // initialize client
+    // map names to bios
+    spawn_turtle();
+
+spawn_turtle()
+    for each in turtle_names {
+        // create a request message of type <turtlesim::srv::Spawn::Request>
+        // fill out the request: (name, x, y, theta)
+        // create a callback (look at previous examples)
+            // callback should print info of turtle and then shutdown
+        // send the async request (look at previous)
+    }
+```
+
+### Full solution
+[header_file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/include/software_training_assignment/spawn_turtle_nodelet.hpp)
+
+[cpp file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/src/spawn_turtle_nodelet.cpp)
+
+## P4
+Create a service that resets the "moving_turtle" to its starting position. The service response should be whether or not it was successful.
+
+### Prerequisite reading
+- [Custom interface files](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Custom-ROS2-Interfaces.html)
+
+### General idea
+- Create a client to send the teleport request to the turtlesim server
+- Create a service to receive the success message from the turtlesim server
+    - Create a custom message to hold the success message
+
+### Code structure
+
+#### Custom message
+```
+
+---
+bool success
+```
+
+#### CMake
+```CMake
+# custom services and messages and actions
+rosidl_generate_interfaces(${PROJECT_NAME}
+	"srv/ResetMovingTurtle.srv"
+	DEPENDENCIES std_msgs geometry_msgs builtin_interfaces
+	)
+ament_export_dependencies(rosidl_default_runtime)
+```
+
+#### Class
+```cpp
+public:
+    reset_moving_turtle(const rclcpp::NodeOptions &options);
+
+private:
+    rclcpp::Client<turtlesim::srv::TeleportAbsolute>::SharedPtr client;
+    // timer for running 
+    rclcpp::TimerBase::SharedPtr timer;
+    // create service that will reset turtle to starting point
+    rclcpp::Service<software_training_assignment::srv::ResetMovingTurtle>::SharedPtr service;
+
+
+    std::string turtle_to_move = "moving_turtle";
+    float x_coord = 24.0f;
+    float y_coord = 10.0f;
+    float theta_coord = 0.0F;
+
+    void service_callback(
+        const std::shared_ptr<software_training_assignment::srv::ResetMovingTurtle::Request> request,
+         std::shared_ptr<software_training_assignment::srv::ResetMovingTurtle::Response> response);
+```
+
+#### Implementation
+```cpp
+constructor()
+    // initialize client
+    // initialize service, pass in service_callback()
+service_callback()
+    // void cast the request
+    // create the request message
+    // fill out the request fields (x, y, theta)
+    // create a response callback for the client
+    callback {
+        // void the response
+        // log some success message 
+    }
+
+    // send the client request
+    // set the service response to true (from the parameters)
+```
+
+#### Full solution
+- [header file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/include/software_training_assignment/reset_moving_turtle.hpp)
+- [cpp file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/src/reset_moving_turtle.cpp)
+- [srv file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/srv/ResetMovingTurtle.srv)
+
+## P5
+
+Create a publisher that publishes a custom msg. 
+
+This custom msgs should have 3 float fields that correspond with the x and y distances of "stationary_turtle" to "moving turtle", as well as the distance between the two turtles.
+
+### General idea
+- Create a custom message that holds the required data
+- Create 2 subscribers to read the positions of each data
+- Calculate the distance between them
+- Publish the custom message
+
+### Code structure
 
