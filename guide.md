@@ -382,7 +382,20 @@ constructor()
 
 ## P6
 
-Create an action that moves "moving_turtle" to a waypoint in a straight line by publishing geometry_msgs/Twist msgs to turtleX/cmd_vel.The action's goal command is an absolute position of the waypoint, feedback is distance to the goal, and result is the time it took to reach the goal. You should define a custom action file.
+Create an action that moves "moving_turtle" to a waypoint in a straight line 
+- publish geometry_msgs/Twist msgs to turtleX/cmd_vel.
+
+The action's goal command is an absolute position of the waypoint. 
+- Feedback is distance to the goal
+- result is the time it took to reach the goal. 
+- You should define a custom action file.
+
+### Prerequisite reading
+- [Understanding actions](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Actions/Understanding-ROS2-Actions.html)
+
+### General idea
+- Create a publisher to send commands to the turtle
+- Create a subscriber to get the turtle's position
 
 
 
