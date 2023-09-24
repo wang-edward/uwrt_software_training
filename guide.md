@@ -19,6 +19,7 @@ Create a node that clears any existing turtles when it gets run.
 
 ### Prerequisite reading
 [How to setup your ROS2 workspace with colcon](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Colcon-Tutorial.html)
+
 [Understanding how nodes work]https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html
 
 <details> 
@@ -26,8 +27,9 @@ Create a node that clears any existing turtles when it gets run.
     What architecture is best suited for this task? (Topic, Service / Client, Action)
 
   </summary>
+  ```
     The best architecture to use is the service / client. 
-
+  ```
 </details>
 
 
@@ -35,8 +37,10 @@ Create a node that clears any existing turtles when it gets run.
     <summary>
     What are the benefits and drawbacks of each architecture? When would you use them?
     </summary>
+    ```
     The main reason is that killing the turtles is a discrete message, so you call it on demand rather than continuously.
     A topic would be good for continuous messages, and an action server would be good for continuous messages that are controlled by discrete messages.
+    ```
 </details>
 
 
