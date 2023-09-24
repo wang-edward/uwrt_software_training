@@ -3,8 +3,10 @@
 A guide designed to help get through the UW Robotics Team Onboarding.
 
 General format:
-- Try to spend at least 5 minutes on each step before revealing each hint
-- Reading the linked articles isn't necessary but is helpful to get a stronger knowledge base
+- The guide will progressively reveal the solution: general strategy -> code structure -> full solution.
+- Try to spend at least 5 minutes understanding each stage before moving to the next.
+- Reading the linked articles is a good idea (especially configuring your workspace)
+- Extra reading sections aren't necessary
 
 ## Introduction
 The onboarding uses the turtlesim package to mimic a real life robot.
@@ -22,9 +24,12 @@ Create a node that clears any existing turtles when it gets run
 <details> 
   <summary>
     What architecture is best suited for this task? (Topic, Service / Client, Action)
+
     What are the benefits and drawbacks of each architecture? When would you use them?
   </summary>
-    The best architecture to use is the service / client. The main reason is that killing the turtles is a discrete action, so you call it on demand rather than continuously.
+    The best architecture to use is the service / client. 
+
+    The main reason is that killing the turtles is a discrete action, so you call it on demand rather than continuously.
 </details>
 
 ### General strategy
