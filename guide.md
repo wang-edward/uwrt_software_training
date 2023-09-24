@@ -20,16 +20,14 @@ Create a node that clears any existing turtles when it gets run.
 ### Prerequisite reading
 [How to setup your ROS2 workspace with colcon](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Colcon-Tutorial.html)
 
-[Understanding how nodes work]https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html
+[Understanding how nodes work](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html)
 
 <details> 
   <summary>
     What architecture is best suited for this task? (Topic, Service / Client, Action)
 
   </summary>
-  ```
     The best architecture to use is the service / client. 
-  ```
 </details>
 
 
@@ -37,10 +35,8 @@ Create a node that clears any existing turtles when it gets run.
     <summary>
     What are the benefits and drawbacks of each architecture? When would you use them?
     </summary>
-    ```
     The main reason is that killing the turtles is a discrete message, so you call it on demand rather than continuously.
     A topic would be good for continuous messages, and an action server would be good for continuous messages that are controlled by discrete messages.
-    ```
 </details>
 
 
@@ -86,3 +82,60 @@ kill()
 ### Full solution
 [header file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/include/software_training_assignment/clear_turtles.hpp)
 [cpp file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/src/clear_turtles.cpp)
+
+## P2
+
+Create a component that moves 'turtle1' in a circular motion.
+
+### General idea
+- Create a publisher that sends geometry_msgs::msg::Twist messages to the "/turtle1/cmd_vel" topic
+- The Twist messages represent velocity (linear and angular)
+- The builtin listener for turtle1 will pick it up (subscribes to the topic)
+- We can make the turtle go in a circle by sending the same direction and angle to move in
+    - i.e. move forward 1 unit, turn left 1 unit
+
+### Code structure
+
+#### Class
+
+```cpp
+// publisher
+rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr publisher;
+
+// callback timer
+rclcpp::TimerBase::SharedPtr timer;
+
+// struct to hold a direction
+struct Triple {
+    float x, y, z;
+}
+
+// structs to hold the constant direction messages
+Triple linear{1, 0, 0};
+Triple angular{0, 0, 1};
+```
+
+#### Implementation 
+
+```cpp
+// create a publisher callback
+
+constructor()
+    // instantiate the publisher
+
+    // create the publisher callback
+    auto publisher_callback = [this](void) -> void {
+        // instantiate the <geometry_msgs::msg::Twist> message
+        // fill it out with the constant direction messages above
+        // publish the message (this->publisher->publish)
+    }
+
+    // create a timer to run the callback every n milliseconds
+```
+
+### Full solutions (a bit small differences in structure)
+[Header file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/include/software_training_assignment/turtle_circle_publisher.hpp)
+[cpp file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/src/turtle_circle_publisher.cpp)
+
+## P3
+
