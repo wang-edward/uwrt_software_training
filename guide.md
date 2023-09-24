@@ -9,6 +9,7 @@ General format:
 - Extra reading sections aren't necessary
 
 ### Todo
+- CMake / composition tutorial
 - Finish prerequisites
 - add extra reading
 - p6
