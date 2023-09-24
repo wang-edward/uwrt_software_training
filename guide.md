@@ -8,6 +8,11 @@ General format:
 - Reading the linked articles is a good idea (especially configuring your workspace)
 - Extra reading sections aren't necessary
 
+### Todo
+- Finish prerequisites
+- add extra reading
+- p6
+
 ## Introduction
 The onboarding uses the turtlesim package to mimic a real life robot.
 
@@ -84,8 +89,8 @@ kill()
 ```
 
 ### Full solution
-[header file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/include/software_training_assignment/clear_turtles.hpp)
-[cpp file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/src/clear_turtles.cpp)
+- [header file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/include/software_training_assignment/clear_turtles.hpp)
+- [cpp file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/src/clear_turtles.cpp)
 
 ## P2
 
@@ -138,8 +143,8 @@ constructor()
 ```
 
 ### Full solutions (a bit small differences in structure)
-[Header file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/include/software_training_assignment/turtle_circle_publisher.hpp)
-[cpp file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/src/turtle_circle_publisher.cpp)
+- [Header file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/include/software_training_assignment/turtle_circle_publisher.hpp)
+- [cpp file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/src/turtle_circle_publisher.cpp)
 
 ## P3
 Spawn a turtle named "stationary_turtle" at x = 5, y = 5 
@@ -195,9 +200,8 @@ spawn_turtle()
 ```
 
 ### Full solution
-[header_file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/include/software_training_assignment/spawn_turtle_nodelet.hpp)
-
-[cpp file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/src/spawn_turtle_nodelet.cpp)
+- [header_file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/include/software_training_assignment/spawn_turtle_nodelet.hpp)
+- [cpp file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/src/spawn_turtle_nodelet.cpp)
 
 ## P4
 Create a service that resets the "moving_turtle" to its starting position. The service response should be whether or not it was successful.
