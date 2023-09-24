@@ -282,6 +282,9 @@ Create a publisher that publishes a custom msg.
 
 This custom msgs should have 3 float fields that correspond with the x and y distances of "stationary_turtle" to "moving turtle", as well as the distance between the two turtles.
 
+### Prerequisite Reading
+- [Callback groups](https://docs.ros.org/en/humble/Concepts/About-Executors.html#callback-groups)
+
 ### General idea
 - Create a custom message that holds the required data
 - Create 2 subscribers to read the positions of each data
@@ -289,4 +292,97 @@ This custom msgs should have 3 float fields that correspond with the x and y dis
 - Publish the custom message
 
 ### Code structure
+
+#### msg file
+```cpp
+float64 x_pos
+float64 y_pos
+float64 distance
+```
+
+#### CMake
+```CMake
+# custom services and messages and actions
+rosidl_generate_interfaces(${PROJECT_NAME}
+	"srv/ResetMovingTurtle.srv"
+	"msg/Software.msg"
+	"action/Software.action"
+	DEPENDENCIES std_msgs geometry_msgs builtin_interfaces
+	)
+ament_export_dependencies(rosidl_default_runtime)
+```
+
+#### Class
+```cpp
+public:
+    turtle_publisher(const rclcpp::NodeOptions &options);
+
+private:
+    // position subscribers
+    rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr stationary_turt_sub;
+    rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr moving_turt_sub;
+
+    // turtle publisher with custom message
+    rclcpp::Publisher<software_training_assignment::msg::Software>::SharedPtr publisher;
+
+    // timer for publisher callback
+    rclcpp::TimerBase::SharedPtr timer;
+
+    // callback groups - really just threads to run callbacks
+    rclcpp::CallbackGroup::SharedPtr callbacks;
+
+    float x_stationary_turt;
+    float y_stationary_turt;
+
+    float x_moving_turt;
+    float y_moving_turt;
+
+    float total_distance;
+```
+
+#### Implementation
+```cpp
+constructor()
+    // create a callback for the stationary position
+    callback {
+        // fill out stationary x and y
+    }
+
+    // create a callback for the moving position
+    callback {
+        // fill out moving x and y
+    }
+
+
+    // create the custom publisher callback
+    callback {
+        // get x and y distance from stationary and moving variables
+        // instantiate a custom message
+        // fill out the custom message fields (x, y, distance)
+            // how do you calculate distance between 2 points?
+        / publish the message
+    }
+
+    // look at the solution for this next part
+        // instantiate callback group
+        // create callback thread
+        // create custom name for topic
+        // set callback topic to the custom name 
+
+    // instantiate stationary subscriber
+    // instantiate moving subscriber
+    // instantiate publisher
+    // set timer for publisher
+```
+
+### Full solution
+- [Header file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/include/software_training_assignment/turtle_publisher.hpp)
+- [cpp file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/src/turtle_publisher.cpp)
+- [msg file](https://github.com/keyonjerome/uwrt_software_training_challenge/blob/master/software_training_assignment/msg/Software.msg)
+
+## P6
+
+Create an action that moves "moving_turtle" to a waypoint in a straight line by publishing geometry_msgs/Twist msgs to turtleX/cmd_vel.The action's goal command is an absolute position of the waypoint, feedback is distance to the goal, and result is the time it took to reach the goal. You should define a custom action file.
+
+
 
