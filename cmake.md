@@ -9,7 +9,7 @@ project(software_training) # sets the project name
 - These commands are required in every CMake file
 - project() also sets the PROJECT_NAME variable
 
-## Find packages
+## find_package()
 ```CMake
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
@@ -33,6 +33,7 @@ ls /opt/ros/galactic/share
 ls /opt/ros/galactic/share | grep turtlesim
 ```
 
+## include_directories()
 ```CMake
 include_directories(include)
 ```
@@ -44,6 +45,7 @@ include_directories(include)
 #include "include/software_training/my_code.hpp"
 ```
 
+## generate_interfaces()
 ```CMake
 rosidl_generate_interfaces(${PROJECT_NAME}
 	"srv/Reset.srv"
@@ -86,8 +88,95 @@ add_library(p1 SHARED
 - the <name> field has to be unique
 - [More info on STATIC | SHARED | MODULE](https://cmake.org/cmake/help/latest/command/add_library.html#id2)
 
-## target_compile_definitions
-```cpp
-target_compile_definitions(p1 PRIVATE
-"SOFTWARE_TRAINING_BUILDING_DLL")
+## ament_target_dependencies
+
+syntax:
+```CMake
+ament_target_dependencies( <name> 
+    <INTERFACE|PUBLIC|PRIVATE> [items1...]
+    [<INTERFACE|PUBLIC|PRIVATE> [items2...] 
+)
 ```
+
+example:
+```CMake
+ament_target_dependencies( p1
+  "rclcpp"
+  "rclcpp_components"
+  "turtlesim"
+  "geometry_msgs"
+  "std_msgs")   
+```
+- binds the dependencies to p1
+- ament_target_dependencies is a macro that runs a series of CMake functions under the hood
+- [More info](https://www.reddit.com/r/ROS/comments/i6r6a4/target_link_libraries_vs_ament_target_dependencies/)
+
+## rclcpp_components_register_nodes()
+
+```CMake
+rclcpp_components_register_nodes(p1 "composition::p1_clear")
+```
+- Registers the rclcpp component p1 with the ament resource index
+- The index is composition::p1_clear
+- There is a similar C macro that you need to include at the end of your .cpp files
+
+## RCLCPP_COMPONENTS_REGISTER_NODE (not a CMake command)
+```c
+#include <rclcpp_components/register_node_macro.hpp>
+
+RCLCPP_COMPONENTS_REGISTER_NODE(composition::action_turtle)
+```
+
+## set(node_plugins) (again)
+```CMake
+set(node_plugins "${node_plugins}composition::p4_reset;$<TARGET_FILE:p4\n>")
+```
+
+- After we register the components with the Ament index, we need to update the node_plugins variable
+- See above for more info
+
+## install()
+note: install is super complicated so you don't need to understand it fully
+```CMake
+install(TARGETS
+  p1	
+  p2
+  p3
+  p4
+  p5
+  p6 
+
+	ARCHIVE DESTINATION lib
+	LIBRARY DESTINATION lib 
+	RUNTIME DESTINATION bin
+)
+
+install(DIRECTORY
+	launch
+	DESTINATION share/${PROJECT_NAME}
+)
+```
+- generates installation rules for a project
+- install(TARGETS)
+    - installs the target executables(p1, p2 etc.) to different destinations
+try (from the root of your directory):
+```bash
+ls install/software_training/lib
+ls install/software_training/lib | grep p3
+```
+- install(DIRECTORY)
+    - in this example, I made a folder that held launch files
+    - I want these to be available when i build my package, so:
+    - install copies the folder launch into the destination share/${project_name}, making it available
+- [More info](https://cmake.org/cmake/help/latest/command/install.html)
+
+## ament_package()
+```CMake
+ament_package()
+```
+
+- should **always** be the last command in your CMakeLists.txt
+- a macro to do main project setup
+    - installs the package.xml
+    - registers the package with the ament index
+    - The argument to project will be the package name and **must be identical** to the package name in the package.xml
