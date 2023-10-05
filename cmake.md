@@ -58,3 +58,36 @@ ament_export_dependencies(rosidl_default_runtime)
     - interface files (i.e. .msg) can be composed of subinterfaces
     - sometimes you will want to include a pre-existing interface (defined by a package you installed)
     - Thus, you need to tell CMake which packages to look at.
+
+## node_plugins
+
+```CMake
+set(node_plugins "")
+```
+- Resets the node_plugins variable
+- Used for composition-based makefiles, stores a list of components that are used when generating an executable
+- [More info](https://answers.ros.org/question/354631/what-does-setnode_plugins-actually-do/)
+
+## add_library()
+
+syntax:
+```CMake
+add_library(<name> [STATIC | SHARED | MODULE]
+            [EXCLUDE_FROM_ALL]
+            [<source>...])
+```
+
+example:
+```CMake
+add_library(p1 SHARED
+            src/p1_clear.cpp)
+```
+- creates a library target called p1 to be built from the file src/p1_clear.cpp
+- the <name> field has to be unique
+- [More info on STATIC | SHARED | MODULE](https://cmake.org/cmake/help/latest/command/add_library.html#id2)
+
+## target_compile_definitions
+```cpp
+target_compile_definitions(p1 PRIVATE
+"SOFTWARE_TRAINING_BUILDING_DLL")
+```
