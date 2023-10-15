@@ -20,4 +20,5 @@ Lastly, create a launch file that will start up all the components and the turtl
 
 ## Instructions
 - To start, clone this repository into the /src folder of your ros2_workspace
-- Get started with the [GUIDE](https://github.com/wang-edward/uwrt_software_training/blob/main/GUIDE/guide.md)
+- This repo comes with a complete CMake file and templates for each question
+- **Get started with the [GUIDE](https://github.com/wang-edward/uwrt_software_training/blob/main/GUIDE/guide.md)**
