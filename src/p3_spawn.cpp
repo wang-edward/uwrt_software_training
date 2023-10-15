@@ -2,7 +2,8 @@
 
 namespace composition {
 
-p3_spawn:: p3_spawn(const rclcpp::NodeOptions &options): Node{"p3_spawn", options} {
+p3_spawn:: p3_spawn(const rclcpp::NodeOptions &options)
+    : Node{"p3_spawn", options} {
     // complete this code
 } 
     
