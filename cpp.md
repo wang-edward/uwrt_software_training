@@ -1,4 +1,5 @@
 # Introduction to Modern C++
+Written by: Andrew Zhao, 2023
 
 If the reader of this guide is currently in engineering and hasn't done C++ outside of school, there are some parts that are important to learn and understand before any code is written for training. The UWRT software team uses C++11 and usually C++ learnt in school is C++98. In this guide, there will be some review on important ideas such as memory and OOP while also introducing new concepts important in modern C++ that the software team uses. 
 
@@ -19,9 +20,9 @@ Questions and Feedback can be directed to andrewzhao_, eady or mollaATime on dis
 
 - Iterable for loops
 
-- Memory 
+- Memory (review)
 
-- Object Oriented Programming
+- Object Oriented Programming (review)
 
 - Smart Pointers
 
@@ -31,10 +32,13 @@ Questions and Feedback can be directed to andrewzhao_, eady or mollaATime on dis
 
 - Templates
 
+- TL;DR
+
+
 
 #Vectors
 
-Before talking about a vector, it's important to understand why a Vector is needed. This is understood by looking at the limitations of an array. The idea of an array is it allows for data that is grouped together to be represented by one variable. For example, a new array is created below:
+Before talking about a vector, it's important to understand why a Vector is needed. This is understood by looking at the limitations of an array. An array allows for data that is grouped together to be represented by one variable. For example:
 
 `int array[] = {2, 4, 10, 5, 15, 3};`
 
@@ -367,30 +371,185 @@ There are four main pillars of object oriented programming
 - Polymorphism
 - Inheritance
 
-Before giving some explanations of them, it helps to first understand what actually is an object.
+These ideas will be explicitly defined at the end of the section as the definitions make much more sense after building up from the foundation and showing various examples of each idea first.
+
+To start, it helps to understand what actually is an object.
 
 **Objects**
 
 Objects in C++ are a way to group data together that makes logical sense. Combined with the four pillars mentioned up above, expressions that can't be done with procedural programming (Logic going line by line only using simple variables and functions) feels natural using objects. 
 
-Imagine trying to create a program that tracks various attributes of a person. This example will be used for the entire OOP section. The height, weight, hair color, eye color and sex are all required to be tracked.
+Imagine trying to create a program that tracks various attributes of a person. This example will be used for the entire OOP section. The height, weight, hair color, eye color and sex are all required to be recorded.
 
-If this is written procedurally, 
+If this is written procedurally, the code might look like this:
+
+```
+int main() {
+    float height;
+    float weight; 
+    string hair_color;
+    string eye_color; 
+    string sex;
+    std::cin >> height >> weight >> hair_color >> eye_color >> sex;
+}
+```
+
+So using this program, it's now possible to keep track of a person! 
+
+But what if two people have to be recorded or three or a thousand? 
+
+The keen programmer might suggest using an array for each property and where the index represents the ith person tracked and suggest the following changes:
 
 
+```
+int main() {
+    //assume static arrays and 1000 people max
+    float height[1000];
+    float weight[1000]; 
+    string hair_color[1000];
+    string eye_color[1000]; 
+    string sex[1000];
+    for(int i = 0; i < 1000; i++){
+        std::cin >> height[i] >> weight[i] >> hair_color[i] >> eye_color[i] >> sex[i];
+    }
+    
+}
+```
+
+This looks a bit like an eyesore and more importantly each array isn't logically grouped together. 
 
 
+Before explaining the details of an object, first this is a demonstration of an object on the same problem.
 
 
+```
+int main() {
+    Person person;
+
+    person.height = //height;
+    person.weight = //weight;
+    person.hair_color = //hair_color;
+    person.eye_color = //eye_color;
+    person.sex = //sex;
+}
+
+```
+
+A person object is created with the details of the person being the attributes being tracked. If another person is created, hair color or weight refers to the actual person, therefore creating a logical association. 
 
 
+However, person is not a type that is given by C++ yet the syntax here is correct. What is happening underneath is that person is implementing a class.
 
 
+**Classes**
 
-In layman's terms what does that mean?
+Since the person type isn't defined, the programmer is able to define it using a class. This is one of the benefits of an object oriented language such as C++, the ability to create user defined types. The following is the syntax for the person class.
+
+```
+class Person{
+    public:
+        float height;
+        float weight;
+        string hair_color;
+        string eye_color;
+        string sex;
+
+};
+```
+Classes can be thought of as a blueprint to creating objects. 
+
+However, just being able to define a class that has custom fields isn't what makes OOP so powerful. If this was the only functionality of classes and objects then this is already done in other procedural languages such as C (structs). 
+
+C++ introduces additional tools such as the ability to have functions as components of a class called member functions.
+
+**Member Variables and Member Functions**
+
+The person class now requires the ability to get the individual's bmi. From our current definition of the person class, there have already been various member variables defined such as hair color or weight. It may be appropriate to add a bmi field called `float bmi` as a member variable as well. 
+
+However, this may not be the best implementation since if the person went on a diet for a half year and lost 20lbs (kgs or whatever unit is being used), it would be expected that `bmi` is updated automatically since it is dependent on weight.
+
+The member function circumvents this issue.
+
+```
+class Person{
+    public:
+        float height;
+        float weight;
+        string hair_color;
+        string eye_color;
+        string sex;
+
+        float bmi();
+
+};
+
+float Person::bmi() {
+    return ((this -> height * this -> height) / this -> weight);
+}
+
+```
 
 
-**Abstraction**
+Similar to a normal function, a member function has both a declaration and a definition. Since the definition of bmi is outside the class, the `Person` namespace is prepended.
+
+Now whenever the bmi is required, `person.bmi();` is used to get the value. 
+
+**this keyword**
+
+On top of the namespace, the keyword `this` is in the previous code snippet. `this` refers to the calling objects member variables. If `Person person` calls `bmi()` then it will use the weight and height of `person` and not any other `Person` object. It is highly recommended to use `this` whenever referring to member variables since failure to do so may lead to unexpected behaviour. 
+
+**Constructors**
+
+So far, the different member variables of the `Person` Class have been populated after instantiating a `Person` object. Sometimes objects can be created this way but more often than not, objects are created with a special member function called the constructor.
+
+The person class is updated now to demonstrate a constructor 
+
+```
+class Person{
+    public:
+        float height;
+        float weight;
+        string hair_color;
+        string eye_color;
+        string sex;
+
+        float bmi();
+
+        Person Person();
+
+};
+
+Person::Person() {
+    this -> height = 175;
+    this -> weight = 75;
+    this -> hair_color = "black";
+    this -> eye_color = "brown";
+    this -> sex;
+}
+
+float Person::bmi() {
+    return ((this -> height * this -> height) / this -> weight);
+}
+
+```
+
+Now whenever creating a `Person` object there are member variables already defined. However, there is a very glaring issue with this implementation, every single `Person` object constructed has the exact same member variables. This is solved with constructor overloading, more generally, function overloads.
+
+
+**Constructor Overloads**
+
+C++ has the idea of function overloads, allowing for multiple definitions of the same function to coexist at the same time. This is an example of polymorphism and may already be very familiar without any knowledge of OOP.
+
+The constructor has the 
+
+
+**Destructors**
+
+**Access Protection**
+
+**Child Classes**
+
+**Abstract Classes**
 
 
     
@@ -403,3 +562,15 @@ Earlier, it was mentioned that the angle brackets used to create a vector would 
 What does this actually mean?
 
 In C++98, if 
+
+
+#TL;DR
+
+Important concepts to understand. Please don't follow this list dogmatically, there are always edge cases where these rules don't apply. 
+
+These are the biggest takeaways for the software team:
+
+- Have working knowledge of OOP
+- Prefer vectors over arrays
+- Prefer smart pointers over naked memory calls
+- Be deliberate when using auto
