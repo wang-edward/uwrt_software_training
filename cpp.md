@@ -24,6 +24,8 @@ Questions and Feedback can be directed to andrewzhao_, eady or mollaATime on dis
 
 - Object Oriented Programming (review)
 
+- Namespaces (review)
+
 - Smart Pointers
 
 - Lvalues, Rvalues
@@ -219,9 +221,15 @@ This line of code creates a variable called `x` that uses memory in order to sto
 1) Stack
 2) Heap
 
+These pieces of memory exist in different areas and are indexed using different memory addresses.
+
+**Memory Addresses**
+
+Just like a home has an address to find it, a piece of memory also has an address to find it called a memory address. Memory addresses are indexed using hexadecimal, 0x0123AF for example. The stack and the heap are in different sections of memory and thus occupy different ranges of addresses.
+ 
 
 **Stack**
-ront of me 
+
 Without using keywords such as `new` or function calls such as `malloc()`, data is being stored on the stack. Variable declarations such as `int x = 5;`, `float y = 2.0f;` or `char z = 'c';` are all being stored onto the stack. 
 
 So why not just always use the stack? Why was the heap mentioned?
@@ -284,20 +292,17 @@ However, if I wanted to see the value of the label on my friend, the only way I 
 Hopefully, this paints an idea of what a memory address is before formally explaining it in the next section.
 
 
-**Memory Addresses**
-
-
-In order to find where a section of memory is in the computer, an address to that memory is required. Regardless if my data lies on my stack or my heap, there is always an address. In the previous section, the analogy for finding the value on a label between the wall and friend still requires an address for the wall. The address isn't needed in order to find the value on the label but it still exists if required, it would be your own home address. 
-
-Likewise, regardless if data is stored on the stack or the heap, there is always an address to that data. 
+**Accessing Memory**
 
 To obtain the address of a variable, prefix a variable with an ampersand `&`.
 
-For example, `&x` will return a hex number the represents the memory address of where x is. 
+For example, `&x` will return the memory address of where x is. 
 
-To obtain the value of data at a memory address, prefix a variable with a star `*`.
+To obtain the value at a memory address, prefix an address with a star `*`.
 
-For example, if `x` is an address/pointer, then `*x` will return the value at the address `x`.
+For example, if `x` is a pointer to an address, then `*x` will return the value at `x`.
+
+If `x` is an integer, then `*x` will still return the data at the address.
 
 For a pointer to an integer, the pointer is the address where the integer resides at. However, what happens when taking the address of a pointer? Try this example:
 
@@ -538,16 +543,127 @@ Now whenever creating a `Person` object there are member variables already defin
 
 **Constructor Overloads**
 
-C++ has the idea of function overloads, allowing for multiple definitions of the same function to coexist at the same time. This is an example of polymorphism and may already be very familiar without any knowledge of OOP.
+C++ has the idea of function overloads, allowing for multiple definitions of the same function to coexist at the same time. This is an example of polymorphism and most developers will be very familiar without any prior knowledge of OOP.
 
-The constructor has the 
+The constructor has the ability to overload as well. This allows to construct objects with various combinations of parameters. 
+
+The previous section had an empty constructor, more usefully, the constructor can also take various different parameters.
+
+A second definition for a constructor is outlined below:
+
+```
+class Person{
+    public:
+        float height;
+        float weight;
+        string hair_color;
+        string eye_color;
+        string sex;
+
+        float bmi();
+
+        Person Person();
+        Person Person(float height, float weight, string hair_color, string eye_color, string sex);
+
+};
+
+Person::Person() {
+    this -> height = 175;
+    this -> weight = 75;
+    this -> hair_color = "black";
+    this -> eye_color = "brown";
+    this -> sex = "male";
+}
+
+Person::Person(float, height, float weight, string hair_color, string eye_color, string sex) {
+    this -> height = height;
+    this -> weight = weight;
+    this -> hair_color = hair_color;
+    this -> eye_color = eye_color;
+    this -> sex = sex;
+}
+
+
+float Person::bmi() {
+    return ((this -> height * this -> height) / this -> weight);
+}
+
+```
+
+Witht this new definition, a person can be created with any combination of inputs or outputs
 
 
 **Destructors**
 
+Whenever an object is no longer used, the destructor for that object is called. The destructor is a special function that is even more special than the constructor. There is no overloading allowed like the constructor.
+
+The Person Class will now be updated to include a destructor.
+
+
+```
+class Person{
+    public:
+        float height;
+        float weight;
+        string hair_color;
+        string eye_color;
+        string sex;
+
+        float bmi();
+
+        Person Person();
+        Person Person(float height, float weight, string hair_color, string eye_color, string sex);
+
+        ~Person();
+
+};
+
+Person::Person() {
+    this -> height = 175;
+    this -> weight = 75;
+    this -> hair_color = "black";
+    this -> eye_color = "brown";
+    this -> sex = "male";
+}
+
+Person::Person(float, height, float weight, string hair_color, string eye_color, string sex) {
+    this -> height = height;
+    this -> weight = weight;
+    this -> hair_color = hair_color;
+    this -> eye_color = eye_color;
+    this -> sex = sex;
+}
+
+Person::~Person(){
+    //clean up operations
+}
+
+
+float Person::bmi() {
+    return ((this -> height * this -> height) / this -> weight);
+}
+
+```
+
+Although not shown here since there hasn't been any object creation of the `Person` class yet, the destructor is very useful for cleanup of resources that an object owns (HINT FOR SMART POINTERS). This includes any memory that the object owns or memory allocated for the object inside the constructor.
+
 **Access Protection**
 
+For a while now, each example from up above has used the keyword `public` before defining the respective member variables. `public` is an example of an access specifier which states what level of access other classes can access an object's data.
+
+The two other important access specifiers in C++ are `private` and `protected` with `private` having the highest level of protection. 
+
+- `public` allows any class to access a classes' data including external classes.
+- `protected` allows only a class and it's children to access it's own data.
+- `private` allows only the class that defines the data to access the data.
+
+
+This type of protection is an example of encapsulation. Sensitive data is encapsulated to prevent any unexpected behaviour due to poor programming practices.
+
+
 **Child Classes**
+
+A child class inherits the member functions and member values of a parent class. 
 
 **Abstract Classes**
 
