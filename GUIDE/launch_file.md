@@ -161,15 +161,16 @@ RegisterEventHandler(
 - registers a callback function that is executed when the turtlesim node exits. 
 ```python
 process_exit = RegisterEventHandler(
-    OnProcessExit(
-        target_action=turtlesim_node,
-        on_exit=[
-            LogInfo(msg=(EnvironmentVariable(name='USER'),
-                    ' closed the turtlesim window')),
-            EmitEvent(event=Shutdown(
-                reason='Window closed'))
-        ]
-    )
+  OnProcessExit(
+    target_action=turtlesim_node,
+    on_exit=[
+      LogInfo(msg=(EnvironmentVariable(name='USER'),
+        ' closed the turtlesim window')),
+        EmitEvent(event=Shutdown(
+        reason='Window closed')
+      )
+    ]
+  )
 ),
 ```
 - logs a message to the console and executes the EmitEvent action to emit a Shutdown event when the turtlesim node exits. 
