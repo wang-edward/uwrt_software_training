@@ -13,9 +13,9 @@ A typical launch file consists of a function called generate_launch_description(
 This function should return a LaunchDescription object, which we'll see later
 
 ```py
-	def generate_launch_description():
-		...
-		return launch.LaunchDescription( ... stuff ... )
+def generate_launch_description():
+	...
+	return launch.LaunchDescription( ... stuff ... )
 ```
 
 Within the generate_launch_description() function, we create different launch objects, which are added to the LaunchDescription and passed to the user.
@@ -96,8 +96,9 @@ clear_container = ComposableNodeContainer(
 
 ## Event Handlers
 - Sometimes we want to run Nodes based on events that happen
-- There are 3 types of Event Handlers that we'll go over
+- There are 5 types of Event Handlers that we'll go over
 	- OnProcessStart
+	- OnProcessIO
 	- OnExecutionComplete
 	- OnProcessExit
 	- OnShutdown
@@ -136,18 +137,23 @@ on_io = RegisterEventHandler(
 - logs the result of the spawn request.
 
 ## OnExecutionComplete
+- registers a callback function that is executed when the spawn_turtle action completes
 ```python
-on_complete = RegisterEventHandler(
+RegisterEventHandler(
 	OnExecutionComplete(
-		target_action = clear_container,
-		on_completion = [
-			LogInfo(msg = 'clear finished, spawn running'),
-			spawn_container,
-		],
+		target_action=spawn_turtle,
+		on_completion=[
+			LogInfo(msg='Spawn finished'),
+			change_background_r,
+			TimerAction(
+				period=2.0,
+				actions=[change_background_r_conditioned],
+			)
+		]
 	)
-)
+),
 ```
-- when clear_container finishes, spawn_container runs
+- logs a message to the console and executes the change_background_r and change_background_r_conditioned actions when the spawn action completes
 - note: you can also pass a list of Nodes to on_completion
 	- Here, we pass LogInfo (which prints to stdout), as well as the spawn_container node
 
@@ -172,9 +178,6 @@ process_exit = RegisterEventHandler(
 
 ## OnShutDown
 - registers a callback function that is executed when the launch file is asked to shutdown. 
-- logs a message to the console containing the shutdown reason, i.e:
-	- closure of turtlesim window 
-	- ctrl-c signal made by the user
 ```python
 on_shutdown = RegisterEventHandler(
 	OnShutdown(
@@ -187,3 +190,6 @@ on_shutdown = RegisterEventHandler(
 	)
 ),
 ```
+- logs a message to the console containing the shutdown reason, i.e:
+	- closure of turtlesim window 
+	- ctrl-c signal made by the user
