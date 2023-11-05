@@ -107,13 +107,13 @@ clear_container = ComposableNodeContainer(
 - Registers a callback function that is executed when target_action starts. 
 ```python
 on_start = RegisterEventHandler(
-    OnProcessStart(
-        target_action=turtlesim_node,
-        on_start=[
-            LogInfo(msg='Turtlesim started, spawning turtle'),
-            spawn_turtle
-        ]
-    )
+  OnProcessStart(
+    target_action=turtlesim_node,
+    on_start=[
+        LogInfo(msg='Turtlesim started, spawning turtle'),
+        spawn_turtle
+    ]
+  )
 ),
 
 ```
