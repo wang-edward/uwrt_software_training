@@ -53,7 +53,7 @@ ros2 run software_training p1_clear
 ```
 To run a composable node, it would be:
 ```md
-ros2 component standalone **software_training** **composition::p1_clear**
+ros2 component standalone software_training composition::p1_clear
 ```
 
 Why is it that composable nodes have so much more stuff?
