@@ -114,7 +114,7 @@ on_start = RegisterEventHandler(
         ]
     )
 ),
-)
+
 ```
 - in this case, executes spawn_turtle when the turtlesim node starts.
 
@@ -132,6 +132,7 @@ on_io = RegisterEventHandler(
 		)
 	)
 ),
+```
 - logs the result of the spawn request.
 
 ## OnExecutionComplete
