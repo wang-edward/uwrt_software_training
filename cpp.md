@@ -663,12 +663,96 @@ This type of protection is an example of encapsulation. Sensitive data is encaps
 
 **Child Classes**
 
-A child class inherits the member functions and member values of a parent class. 
+A child class inherits the member functions and member values of a parent class. Extending the person analogy, both an athlete and an engineer are people. They both have height, weight, eye color and etc. However, an engineer might also want to keep track of which engineer they are such as chemical, mechanical or electrical. There may also need to be a way to track if the engineer is a P.Eng or not and how many years of total work experience. As for the athlete, the team they play for and the sport they play might be important fields to keep track of. 
 
-**Abstract Classes**
+There are some shared categories between the athlete and the engineer but there are also some key differences. It might be tempeting to just create another class that can track the two. However instead, we can have both of the engineer and the athlete inherit from the human.
+
+![UML Image](Images/human_engineer_athlete.png)
+
+Allowing for both of them to share the person member variables such as height, weight and member functions such as bmi() but without requiring new classes.
+
+In code this looks like 
+
+```
+class Person{
+    public:
+        virtual float height;
+        virtual float weight;
+        virtual string hair_color;
+        virtual string eye_color;
+        virtual string sex;
+
+        virtual float bmi();
+
+        Person Person();
+        Person Person(float height, float weight, string hair_color, string eye_color, string sex);
+
+        ~Person();
+
+};
+
+Person::Person() {
+    this -> height = 175;
+    this -> weight = 75;
+    this -> hair_color = "black";
+    this -> eye_color = "brown";
+    this -> sex = "male";
+}
+
+Person::Person(float, height, float weight, string hair_color, string eye_color, string sex) {
+    this -> height = height;
+    this -> weight = weight;
+    this -> hair_color = hair_color;
+    this -> eye_color = eye_color;
+    this -> sex = sex;
+}
+
+Person::~Person(){
+    //clean up operations
+}
 
 
+float Person::bmi() {
+    return ((this -> height * this -> height) / this -> weight);
+}
+
+
+class Athlete : public Person {
+
+    public:
+        boolean P.eng;
+        string type;
+}
+
+class Engineer : public Person {
+
+    public:
+        string sport;
+        string team;
+}
+
+...(other code such as constructors are hidden)
+
+```
     
+Engineer and athlete have now inherited Person. If an engineer or an athlete were to be constructed, they will have the member variables and functions of Person but in addition to the new fields added for each inherited member. 
+
+In addition to the example of inheritance, there was also the virtual keywords which are mandatory to ensure proper code behaviour whenever inheriting.
+
+**Overriding**
+
+In the previous example, it was a straight forward example of inheritance. The child classes only added behaviour to the parent class. However, if behaviour from the parent class were to be changed, the virtual keyword that was just mentioned in addition to a new keyword 'override' is required. 
+
+
+#Namespaces
+
+
+
+#Smart Pointers
+
+#Lvalues, Rvalues
+
+#Copy and Move Semantics
 
 
 #Templates
