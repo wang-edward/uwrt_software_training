@@ -24,13 +24,7 @@ Questions and Feedback can be directed to andrewzhao_, eady or mollaATime on dis
 
 - Object Oriented Programming (review)
 
-- Namespaces (review)
-
 - Smart Pointers
-
-- Lvalues, Rvalues
-
-- Copy and Move Semantics
 
 - Templates
 
@@ -200,6 +194,24 @@ The reason `auto` is permitted is that `list` is defined to be of integer type a
 
 The standard for loop does have some advantages as earlier mentioned. For one, the iterable for loop makes it more difficult and unreadable if finding a specific index of the vector is important.
 
+
+#Templates
+
+Earlier, it was mentioned that the angle brackets used to create a vector would be further explained in this section. Templates allow for a function or data structure that uses various different types to rely on the same definition. 
+
+What does this actually mean?
+
+In C++98, if I wanted to create a function called `isGreater()` which took two numbers and checked if the first number was greater than the second. I would need different functions for the different combinations of parameters I could pass through. 
+
+Using templates, I am able to do all of them in one go. For example:
+
+```
+Template<typename T>
+T isGreater(T x, T y) {
+    return x > y;
+}
+```
+The code up above will now handle add `int`, `float` and `char` are passed.
 
 #Memory
 
@@ -741,27 +753,78 @@ In addition to the example of inheritance, there was also the virtual keywords w
 
 **Overriding**
 
-In the previous example, it was a straight forward example of inheritance. The child classes only added behaviour to the parent class. However, if behaviour from the parent class were to be changed, the virtual keyword that was just mentioned in addition to a new keyword 'override' is required. 
+In the previous example, it was a straight forward example of inheritance. The child classes only added behaviour to the parent class. 
+
+However, if behaviour from the parent class were to be changed, the virtual keyword that was just mentioned in addition to a new keyword `override` is required. 
 
 
-#Namespaces
+```
+class Person{
+    public:
+        virtual float height;
+        virtual float weight;
+        virtual string hair_color;
+        virtual string eye_color;
+        virtual string sex;
 
+        virtual float bmi();
 
+        Person Person();
+        Person Person(float height, float weight, string hair_color, string eye_color, string sex);
+
+        ~Person();
+
+};
+
+...
+
+class Athlete : public Person {
+
+    public:
+        boolean P.eng;
+        string type;
+
+        virtual bmi() override;
+}
+
+...
+
+```
+
+The code is now updated to override `bmi()`. Notice that to override anything, the parent member function has to be declared as virtual.
 
 #Smart Pointers
 
-#Lvalues, Rvalues
+All the previous sections were to build up to this section. Smart pointers are a brand new concept introduced in C++11. They allow for access to heap memory without needing to explicitly handle cleanups by the developer. This helps to minimize memory errors.
 
-#Copy and Move Semantics
+There are three types of smart pointers
+
+- Shared Pointers
+- Weak Pointers
+- Unique Pointers
+
+There won't be much explanation of weak or unique pointers in this tutorial and mainly shared pointers will be mentinoed since the reader of this manual will be most familiar with the functionality of a shared pointer.
+
+Unique pointers are very similar to traditional memory where there can be multiple copies of the same memory address and multiple owners of the same pointer. 
+
+**Initializing Smart Pointers**
 
 
-#Templates
+```
+//raw pointer
+int * x = new int(4);
 
-Earlier, it was mentioned that the angle brackets used to create a vector would be further explained in this section. Templates allow for a function or data structure that uses various different types to rely on the same definition. 
+//smart pointer
+std::unique_ptr<int> x(new int(4));
 
-What does this actually mean?
+```
 
-In C++98, if 
+Using the pointer is the same as a raw pointer.
+
+The raw pointer needs to be paired with a delete call later while the smart pointer here is cleaned up by the smart pointer's destructor.
+
+
+
 
 
 #TL;DR
