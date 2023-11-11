@@ -257,7 +257,7 @@ These pieces of memory exist in different areas and are indexed using different 
 ## Memory Addresses
 
 Just like a home has an address to find it, a piece of memory also has an address to find it called a memory address. Memory addresses are indexed using hexadecimal, 0x0123AF for example. The stack and the heap are in different sections of memory and thus occupy different ranges of addresses.
- 
+![memory image](Images/memory.png)
 
 ## Stack
 
@@ -266,7 +266,6 @@ Without using keywords such as `new` or function calls such as `malloc()`, data 
 So why not just always use the stack? Why was the heap mentioned?
 
 The stack can only allocate memory for fixed size objects at compile time. Simply put, if I want an array where the size of the array is determined while my code is running, I cannot use the stack.
-
 
 ## Heap
 
