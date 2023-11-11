@@ -9,38 +9,29 @@ There will be included code snippets as examples incase there is any confusion. 
 
 Questions and Feedback can be directed to andrewzhao_, eady or mollaATime on discord. (Feel free to ask questions and voice any complaints or suggestions for improving this guide.)
 
-
-**List of Concepts in this Guide**
+### List of Concepts in this Guide
 
 - Vectors
-
 - `auto` type
-
 - Lambda functions
-
 - Iterable for loops
-
 - Memory (review)
-
 - Object Oriented Programming (review)
-
 - Smart Pointers
-
 - Templates
-
 - TL;DR
 
-
-
-#Vectors
+# Vectors
 
 Before talking about a vector, it's important to understand why a Vector is needed. This is understood by looking at the limitations of an array. An array allows for data that is grouped together to be represented by one variable. For example:
 
-`int array[] = {2, 4, 10, 5, 15, 3};`
+```cpp
+int array[] = {2, 4, 10, 5, 15, 3};`
+```
 
 ![Array Image](Images/array.png)
 
-Hopefully both the code and the image make intuitive sense as  this guide won't spend too much time explaining arrays. 
+Hopefully both the code and the image make intuitive sense as this guide won't spend too much time explaining arrays. 
 
 There are some major limitations with an array.
 
@@ -53,35 +44,50 @@ Thankfully, C++11 solves the aforementioned problems with `Vectors`.
 
 Vectors can be thought of as dynamically sized arrays with functions to help with memory protection. Vectors are created a bit differently than arrays are in C++. Vectors are read and modified with square brackets [] similar to arrays, however there are also functions that add additional protection that are preferred instead. 
 
-
-**Vector Creation**
-
-`std::vector<int> vector = {2, 4, 10, 5, 15, 3}`
+## Vector Creation
 
 This is the syntax to create a vector with the name `vector` that has the same elements as the array up above.
+```cpp
+std::vector<int> v = {2, 4, 10, 5, 15, 3}
+```
 
 `vector` can be modified and read using square brackets as well. The angle brackets might seem foreign and will be explained in the next section on Templates. (Bonus points if their beheaviour can be guessed)
+```cpp
+v[1] = 42; // {2, 42, 10, 5, 15, 3}
+int x = v[3]; // 5
+```
 
 If code isn't compiling, make sure the vector header is included in the source code before compiling.
+```cpp
+#include <vector>
+```
 
-
-**Adding and Removing New Elements** 
+## Adding and Removing New Elements 
 
 So creation of a vector is slightly different than an array but the behaviour seems to be pretty similar so far. However this is something that is exclusive to a vector, dynamic sizing. One of the biggest issues that were mentioned with arrays were that they had difficulty changing size. Once an array of size 6 is declared, it will always have 6 elements and can never change. 
 
 For a vector, adding new elements using `push_back()` handles the complexities of resizing. 
-
-Given the above example if I wanted to add a 7th element to `vector`, all I have to do is call `vector.push_back(5)` and now my vector has a 7th element that is appended to the end of the vector. 
+```cpp
+vector<int> v = {1, 2, 3};
+v.push_back(4); // {1, 2, 3, 4}
+```
 
 If I want to delete an element at the end of the vector then I call `vector.pop_back()`.
+```cpp
+vector<int> v = {1, 2, 3, 4};
+v.pop_back(); // {1, 2, 3}
+```
 
 
-**Memory Protection**
+## Memory Protection
 
 Earlier, it was mentioned that elements in the vector can be read and modified with square brackets similar to an array. However, this may lead to unexpected behaviour if indexing out of bounds. 
 
 Vectors solve this issue with `at()` function call. Reading a value is done with `vector.at(index)` and setting a value is done by assigning a value `vector.at(index)`. There will be a bounds check done by `at()` before assignment. 
-
+```cpp
+vector<int> v = {1, 2, 3, 4};
+v.at(2); // 3
+```
 
 In summary, this table illustrates the parallels and differences between vectors and arrays.
 
@@ -92,11 +98,10 @@ In summary, this table illustrates the parallels and differences between vectors
 |Modifying|`array[index] = new_value;` | `vector.at(index) = new_value;`|
 |Adding New Element| NA | `vector.push_back(new_value);`|
 |Removing New Element| NA | `vector.pop_back();`|
+|Inserting New Element| NA | `vector.insert(vector.begin() + index, new_value);`|
+|Erasing Element| NA | `vector.erase(vector.begin() + index);`|
 
-
-
-
-#auto Keyword
+# auto Keyword
 
 C++ is known for requiring a type for every variable. This remains true in C++11 but there are times when the programmer doesn't care about the exact type . The `auto` keyword allows for creating a variable with the type being determined at runtime instead of compile time. However, `auto` should be used sparingly and not as a replacement for types as it leads to poor coding practices and undefined behaviour. 
 
@@ -106,25 +111,30 @@ For example
 
 Is difficult to debug and use since counter's type is determined at runtime and if counter is used in the future, there can be unexpected behaviour. 
 
-
 `auto` is better off used whenever the type itself is very obvious to the programmer such as creating lambda functions or iterable for loops.
+```cpp
+auto message = std::make_unique<sensor_msgs::msg::Imu>();
+std::unique_ptr<sensor_msgs::msg::Imu> message = std::make_unique<sensor_msgs::msg::Imu>();
+```
+- unique pointers are a good application for auto because they usually repeat information in the type and the constructor
 
-
-#Lambda Functions
+# Lambda Functions
 
 The advantage of functions in programming instead of using just the main function is the ability to isolate code, create better readability and allow for more reusable code. However, sometimes, portions of logic are only used once and the additional overhead of writing a function just isn't worth the tradeoff. C++11 tries to find a balance by introducing Lambda functions. Lambdas are inline functions that are defined inside the code itself. The syntax is as follows:
 
-
-`auto function = [capture clauses](parameter list) -> return type { function definition }`
+```cpp
+auto function = [capture clauses](parameter list) -> return type { function definition };
+```
 
 This is one of the instances where using `auto` is ok as the function itself is just a pointer and the type of the pointer is explicitly defined in the lambda. Requiring an explicit declaration would be superfluous.
 
-`int main() {`
-  
+```cpp
+int main() {
     int x = 5;
     auto function = [](int x) -> int {return x += 2;};
-    std::cout << function(x) << std::endl;
-`}`
+    std::cout << function(x) << std::endl; // 7
+}
+```
 
 It is expected that x is 7.
 
@@ -133,26 +143,29 @@ Most of the lambda is self explanatory except for the capture clauses. Capture c
 
 Although this is a crude example, proper use of lambdas allows for better code isolation and readability without much extra overhead. 
 
-
-#Iterable For Loops
+# Iterable For Loops
 
 This is another instance where `auto` is permitted. Typically, for loops in C++ are defined as:
 
 ![For Loops](Images/c-for-statement.png)
 
-
 These types of loops are still commonly used in C++11 but an alternative called the iterable for loop is sometimes preferred or necessary. 
 
 The iterable loop is defined as 
 
-`for (auto iterator : iterable_list<type T>) {`
-`}`
+```cpp
+for (auto iterator : iterable_list<type T>) {
+    // do something with iterator
+}
+```
 
 Once again the angled brackets will be explained later. Upon first inspection, this seems much less straight forward than the standard for loop and in some cases, it is also less useful than a standard for loop.
 
 However consider an example of looping through a vector to get the size of all elements inside. Remember that vectors are dynamically sized.
 
-`std::vector<int> list = {1, 2, 3}`
+```cpp
+std::vector<int> list = {1, 2, 3};
+```
 
 Earlier, it was explained that this vector can be appended to and deleted from while the code is running. Using a standard for loop, there are two approaches to this problem:
 1) Using a variable to track the number of elements to iterate through.
@@ -160,33 +173,39 @@ Earlier, it was explained that this vector can be appended to and deleted from w
 
 The second approach does seem more appealing. However, look at the code
 
-`for (int i = 0; i < list.size(); i++) {`
-`   return_sum += list.at(i);`
-`}`
+```cpp
+for (int i = 0; i < list.size(); i++) {
+    return_sum += list.at(i);
+}
+```
 
 It isn't very visually appealing. Perhaps you're not convinced. So lets make list a 3x3 matrix and try summing that instead
 
-`for (int i = 0; i < list.at(0).size(); i++){`
-`   for(int j = 0; j < list.size(); j++) {`
-`       return_sum += list.at(i).at(j);`
-`   }`
-`}`
-
+```cpp
+for (int i = 0; i < list.at(0).size(); i++){
+   for(int j = 0; j < list.size(); j++) {
+       return_sum += list.at(i).at(j);
+   }
+}
+```
 
 Let's compare that to how the iterable for loop would preform the summation
 
-`for(auto element : list) {`
-`   return_sum += element;`
-`}`
+```cpp
+for(auto element : list) {
+   return_sum += element;
+}
+```
 
 And for the matrix example
 
-`for (auto row : list){`
-`   for(auto column : row) {`
-`       return_sum += column;`
-`   }`
-`}`
-
+```cpp
+for (auto row : list){
+   for(auto column : row) {
+       return_sum += column;
+   }
+}
+```
 
 Its easier to see what is going on in the code! 
 
@@ -194,8 +213,7 @@ The reason `auto` is permitted is that `list` is defined to be of integer type a
 
 The standard for loop does have some advantages as earlier mentioned. For one, the iterable for loop makes it more difficult and unreadable if finding a specific index of the vector is important.
 
-
-#Templates
+# Templates
 
 Earlier, it was mentioned that the angle brackets used to create a vector would be further explained in this section. Templates allow for a function or data structure that uses various different types to rely on the same definition. 
 
@@ -205,7 +223,7 @@ In C++98, if I wanted to create a function called `isGreater()` which took two n
 
 Using templates, I am able to do all of them in one go. For example:
 
-```
+```cpp
 Template<typename T>
 T isGreater(T x, T y) {
     return x > y;
@@ -213,10 +231,9 @@ T isGreater(T x, T y) {
 ```
 The code up above will now handle add `int`, `float` and `char` are passed.
 
-#Memory
+# Memory
 
 This next section is a bit of review. Memory and memory allocation are notorious for being difficult to understand in C++. This section is very important to make sure that the reader is clear in their understanding before continuing any further.
-
 
 First off, what is memory? Why do we need it?
 
@@ -226,7 +243,9 @@ Memory is extremely important and our primary concern is with variables and data
 
 Without even knowing it, most variables created already allocate and use memory. Consider the following line of code: 
 
-`int x = 5;`
+```cpp
+int x = 5;
+```
 
 This line of code creates a variable called `x` that uses memory in order to store the value 5 for further use. Before continuing any further, it is important to distinguish between the two major pieces of memory that a C++ programmer interacts with:
 
@@ -235,12 +254,12 @@ This line of code creates a variable called `x` that uses memory in order to sto
 
 These pieces of memory exist in different areas and are indexed using different memory addresses.
 
-**Memory Addresses**
+## Memory Addresses
 
 Just like a home has an address to find it, a piece of memory also has an address to find it called a memory address. Memory addresses are indexed using hexadecimal, 0x0123AF for example. The stack and the heap are in different sections of memory and thus occupy different ranges of addresses.
  
 
-**Stack**
+## Stack
 
 Without using keywords such as `new` or function calls such as `malloc()`, data is being stored on the stack. Variable declarations such as `int x = 5;`, `float y = 2.0f;` or `char z = 'c';` are all being stored onto the stack. 
 
@@ -249,7 +268,7 @@ So why not just always use the stack? Why was the heap mentioned?
 The stack can only allocate memory for fixed size objects at compile time. Simply put, if I want an array where the size of the array is determined while my code is running, I cannot use the stack.
 
 
-**Heap**
+## Heap
 
 If there is data where the amount of memory the data takes up is only known while running, the heap has to be used.
 
@@ -257,37 +276,42 @@ The heap is memory that is protected (by the OS) and must be requested in order 
 
 To use memory from the heap, C++ has the `new` keyword to request memory.
 
-`int * x = new int(5);`
+```cpp
+int * x = new int(5);
+```
 
 There is now a variable x that has the value 5 on the heap. However, the syntax of using heap memory is much different than the stack memory. There is a `*` following `int` called a pointer and so x is no longer an integer it is now a pointer to an integer. 
 
-
 This is confusing upon first learning however, the following sections illustrate what is going on in a detailed manner.
 
-
-**Pointers** 
+## Pointers
 
 It was mentioned that when using the heap, x is a pointer to an integer rather than an integer like using the stack.
 
 To see how this is actually different, try printing x on both the stack and the heap:
 
-`int x = 5;`
-`std::cout << x << std::endl;`
+```cpp
+int x = 5;
+std::cout << x << std::endl;
+```
 
 This results in 5 being printed out which is what is expected. 
 
 However try printing out the pointer,
 
-`int * x = new int(5);`
-`std::cout << x << std::endl;`
-
+```cpp
+int * x = new int(5);
+std::cout << x << std::endl;
+```
 
 This will almost never print 5, in fact it will usually result in some large random number or there might be a 0x followed by some random numbers. What is even more strange is `x` will never print the same value in a row when rerunning. 
 
 A pointer, like the example above illustrates, is not the same as an integer. A pointer points to a memory address, an address that says exactly where my piece of memory is in my computer, hence the name pointer. The values that were being printed when x was on the heap were memory addresses where x was located. Before explaining what a memory address is, to verify that x being 5 actually does exist on memory, try running:
 
-`int * x = new int(5);`
-`std::cout << *x << std::endl;`
+```cpp
+int * x = new int(5);
+std::cout << *x << std::endl;
+```
 
 Miraculously, 5 is printed! The value at the memory address was printed and not the address itself. 
 
@@ -304,7 +328,7 @@ However, if I wanted to see the value of the label on my friend, the only way I 
 Hopefully, this paints an idea of what a memory address is before formally explaining it in the next section.
 
 
-**Accessing Memory**
+## Accessing Memory
 
 To obtain the address of a variable, prefix a variable with an ampersand `&`.
 
@@ -318,9 +342,11 @@ If `x` is an integer, then `*x` will still return the data at the address.
 
 For a pointer to an integer, the pointer is the address where the integer resides at. However, what happens when taking the address of a pointer? Try this example:
 
-`int * x = new int(5);`
-`std::cout << x << std::endl;`
-`std::cout << &x << std::endl;`
+```cpp
+int * x = new int(5);
+std::cout << x << std::endl;
+std::cout << &x << std::endl;
+```
 
 Intrestingly enough, a different address then the pointer is printed out, and suprisingly, this address is actually the stack (seem confusing?).
 
@@ -329,8 +355,10 @@ Hopefully this example can illustrate what's happening in code:
 
 If a pointer with the value 5 is created.
 
-`int * x = new int(5);`
-`std::cout << x << std::endl;`
+```cpp
+int * x = new int(5);
+std::cout << x << std::endl;
+```
 
 If `x` prints 0x008 and `*x` prints 5 then this is a visual representation of heap memory at the moment.
 
@@ -345,7 +373,9 @@ In order to print `x`, the value 0x008 or the pointer to the heap memory also ha
 
 When this line of code is run
 
-`std::cout << &x << std::endl;`
+```cpp
+std::cout << &x << std::endl;
+```
 
 if 0x004 is returned, this can be visualized as following in the stack memory.
 
@@ -362,7 +392,7 @@ So `x` the pointer is the address of the heap data which contains 5 but it's not
 
 Following the analogy from the previous section, to find the address of my friend, I have to use my phone to find him. However, my phone also has an address itself which isn't the location of my friend but the address of the device that helps find my friend.
 
-**Freeing Memory**
+## Freeing Memory
 
 This is the most important section to understand the next parts. 
 
@@ -378,8 +408,7 @@ So should we not use the heap at all?
 Well not really, it still is very powerful whenever dynamic memory allocation is needed. However, compared to other programming languages like Java, C++ doesn't have garbage collection built into the language to gurantee that data is cleaned up after it's been done being used. Fortunately, C++11 introduces new tools that rely on object oriented programming to offer a solution. Before introducing them, a review of OOP is necessary.
 
 
-#Object Oriented Programming
-
+# Object Oriented Programming
 
 There are four main pillars of object oriented programming 
 
@@ -392,7 +421,7 @@ These ideas will be explicitly defined at the end of the section as the definiti
 
 To start, it helps to understand what actually is an object.
 
-**Objects**
+## Objects
 
 Objects in C++ are a way to group data together that makes logical sense. Combined with the four pillars mentioned up above, expressions that can't be done with procedural programming (Logic going line by line only using simple variables and functions) feels natural using objects. 
 
@@ -400,7 +429,7 @@ Imagine trying to create a program that tracks various attributes of a person. T
 
 If this is written procedurally, the code might look like this:
 
-```
+```cpp
 int main() {
     float height;
     float weight; 
@@ -417,8 +446,7 @@ But what if two people have to be recorded or three or a thousand?
 
 The keen programmer might suggest using an array for each property and where the index represents the ith person tracked and suggest the following changes:
 
-
-```
+```cpp
 int main() {
     //assume static arrays and 1000 people max
     float height[1000];
@@ -435,11 +463,10 @@ int main() {
 
 This looks a bit like an eyesore and more importantly each array isn't logically grouped together. 
 
-
 Before explaining the details of an object, first this is a demonstration of an object on the same problem.
 
 
-```
+```cpp
 int main() {
     Person person;
 
@@ -458,11 +485,11 @@ A person object is created with the details of the person being the attributes b
 However, person is not a type that is given by C++ yet the syntax here is correct. What is happening underneath is that person is implementing a class.
 
 
-**Classes**
+## Classes
 
 Since the person type isn't defined, the programmer is able to define it using a class. This is one of the benefits of an object oriented language such as C++, the ability to create user defined types. The following is the syntax for the person class.
 
-```
+```cpp
 class Person{
     public:
         float height;
@@ -479,7 +506,7 @@ However, just being able to define a class that has custom fields isn't what mak
 
 C++ introduces additional tools such as the ability to have functions as components of a class called member functions.
 
-**Member Variables and Member Functions**
+## Member Variables and Member Functions
 
 The person class now requires the ability to get the individual's bmi. From our current definition of the person class, there have already been various member variables defined such as hair color or weight. It may be appropriate to add a bmi field called `float bmi` as a member variable as well. 
 
@@ -487,7 +514,7 @@ However, this may not be the best implementation since if the person went on a d
 
 The member function circumvents this issue.
 
-```
+```cpp
 class Person{
     public:
         float height;
@@ -511,17 +538,17 @@ Similar to a normal function, a member function has both a declaration and a def
 
 Now whenever the bmi is required, `person.bmi();` is used to get the value. 
 
-**this keyword**
+## this keyword
 
 On top of the namespace, the keyword `this` is in the previous code snippet. `this` refers to the calling objects member variables. If `Person person` calls `bmi()` then it will use the weight and height of `person` and not any other `Person` object. It is highly recommended to use `this` whenever referring to member variables since failure to do so may lead to unexpected behaviour. 
 
-**Constructors**
+## Constructors
 
 So far, the different member variables of the `Person` Class have been populated after instantiating a `Person` object. Sometimes objects can be created this way but more often than not, objects are created with a special member function called the constructor.
 
 The person class is updated now to demonstrate a constructor 
 
-```
+```cpp
 class Person{
     public:
         float height;
@@ -553,7 +580,7 @@ float Person::bmi() {
 Now whenever creating a `Person` object there are member variables already defined. However, there is a very glaring issue with this implementation, every single `Person` object constructed has the exact same member variables. This is solved with constructor overloading, more generally, function overloads.
 
 
-**Constructor Overloads**
+## Constructor Overloads
 
 C++ has the idea of function overloads, allowing for multiple definitions of the same function to coexist at the same time. This is an example of polymorphism and most developers will be very familiar without any prior knowledge of OOP.
 
@@ -563,7 +590,7 @@ The previous section had an empty constructor, more usefully, the constructor ca
 
 A second definition for a constructor is outlined below:
 
-```
+```cpp
 class Person{
     public:
         float height;
@@ -602,17 +629,15 @@ float Person::bmi() {
 
 ```
 
-Witht this new definition, a person can be created with any combination of inputs or outputs
+With this new definition, a person can be created with any combination of inputs or outputs
 
-
-**Destructors**
+## Destructors
 
 Whenever an object is no longer used, the destructor for that object is called. The destructor is a special function that is even more special than the constructor. There is no overloading allowed like the constructor.
 
 The Person Class will now be updated to include a destructor.
 
-
-```
+```cpp
 class Person{
     public:
         float height;
@@ -659,7 +684,7 @@ float Person::bmi() {
 
 Although not shown here since there hasn't been any object creation of the `Person` class yet, the destructor is very useful for cleanup of resources that an object owns (HINT FOR SMART POINTERS). This includes any memory that the object owns or memory allocated for the object inside the constructor.
 
-**Access Protection**
+##Access Protection
 
 For a while now, each example from up above has used the keyword `public` before defining the respective member variables. `public` is an example of an access specifier which states what level of access other classes can access an object's data.
 
@@ -673,7 +698,7 @@ The two other important access specifiers in C++ are `private` and `protected` w
 This type of protection is an example of encapsulation. Sensitive data is encapsulated to prevent any unexpected behaviour due to poor programming practices.
 
 
-**Child Classes**
+## Child Classes
 
 A child class inherits the member functions and member values of a parent class. Extending the person analogy, both an athlete and an engineer are people. They both have height, weight, eye color and etc. However, an engineer might also want to keep track of which engineer they are such as chemical, mechanical or electrical. There may also need to be a way to track if the engineer is a P.Eng or not and how many years of total work experience. As for the athlete, the team they play for and the sport they play might be important fields to keep track of. 
 
@@ -685,7 +710,7 @@ Allowing for both of them to share the person member variables such as height, w
 
 In code this looks like 
 
-```
+```cpp
 class Person{
     public:
         virtual float height;
@@ -751,14 +776,14 @@ Engineer and athlete have now inherited Person. If an engineer or an athlete wer
 
 In addition to the example of inheritance, there was also the virtual keywords which are mandatory to ensure proper code behaviour whenever inheriting.
 
-**Overriding**
+## Overriding
 
 In the previous example, it was a straight forward example of inheritance. The child classes only added behaviour to the parent class. 
 
 However, if behaviour from the parent class were to be changed, the virtual keyword that was just mentioned in addition to a new keyword `override` is required. 
 
 
-```
+```cpp
 class Person{
     public:
         virtual float height;
@@ -793,7 +818,7 @@ class Athlete : public Person {
 
 The code is now updated to override `bmi()`. Notice that to override anything, the parent member function has to be declared as virtual.
 
-#Smart Pointers
+# Smart Pointers
 
 All the previous sections were to build up to this section. Smart pointers are a brand new concept introduced in C++11. They allow for access to heap memory without needing to explicitly handle cleanups by the developer. This helps to minimize memory errors.
 
@@ -807,10 +832,10 @@ There won't be much explanation of weak or unique pointers in this tutorial and 
 
 Unique pointers are very similar to traditional memory where there can be multiple copies of the same memory address and multiple owners of the same pointer. 
 
-**Initializing Smart Pointers**
+## Initializing Smart Pointers
 
 
-```
+```cpp
 //raw pointer
 int * x = new int(4);
 
@@ -822,10 +847,6 @@ std::unique_ptr<int> x(new int(4));
 Using the pointer is the same as a raw pointer.
 
 The raw pointer needs to be paired with a delete call later while the smart pointer here is cleaned up by the smart pointer's destructor.
-
-
-
-
 
 #TL;DR
 

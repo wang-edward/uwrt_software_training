@@ -3,16 +3,14 @@
 In order to use linux, these ideas are very important to understand beforehand. Most of file navigation in linux is done through the terminal
 
 
-#Understanding the Terminal
+# Understanding the Terminal
 The terminal is accessed using `ctrl` + `alt` + `t`. Upon opening the terminal the user sees a shell to type in commands and a directory that indicates where the user is in their current file system
 
-#Man Pages
+# Man Pages
 
 Each of the commands introduced below have a cooresponding manual highlighting how to use it called the man page. The commands below are briefly mentioned with the intention of the reader to go through the man page to practice using it.
 
-
-
-#Commands
+# Commands
 This is a short list of commands to know. There is no need to memorize them.
 
 - `man`
@@ -46,7 +44,7 @@ Indicates the root directory
 
 Example 1: Creating a file named `note.txt` 
 
-```
+```sh
 > touch note.txt
 ```
 
@@ -64,7 +62,7 @@ Parent --
 
 ```
 
-```
+```sh
 > find ./src/note.txt 
 ```
 Example 3: Entering src first. Then moving a file named `note.txt` from src to my parent directory
@@ -79,7 +77,7 @@ Parent --
 
 ```
 
-```
+```sh
 > cd src
 ```
 ```
@@ -89,7 +87,7 @@ Parent --
 ---- folder
 ```
 
-```
+```sh
 > mv ./note.txt ..
 ```
 
