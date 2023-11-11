@@ -257,6 +257,7 @@ These pieces of memory exist in different areas and are indexed using different 
 ## Memory Addresses
 
 Just like a home has an address to find it, a piece of memory also has an address to find it called a memory address. Memory addresses are indexed using hexadecimal, 0x0123AF for example. The stack and the heap are in different sections of memory and thus occupy different ranges of addresses.
+
 ![memory image](Images/memory.png)
 
 ## Stack
