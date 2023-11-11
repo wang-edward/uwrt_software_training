@@ -11,7 +11,7 @@ Questions and Feedback can be directed to andrewzhao_, eady or mollaATime on dis
 
 ### List of Concepts in this Guide
 
-- Vectors
+- [Vectors](https://github.com/wang-edward/uwrt_software_training/blob/cpp_setup/cpp.md#vectors)
 - `auto` type
 - Lambda functions
 - Iterable for loops
@@ -684,7 +684,7 @@ float Person::bmi() {
 
 Although not shown here since there hasn't been any object creation of the `Person` class yet, the destructor is very useful for cleanup of resources that an object owns (HINT FOR SMART POINTERS). This includes any memory that the object owns or memory allocated for the object inside the constructor.
 
-##Access Protection
+## Access Protection
 
 For a while now, each example from up above has used the keyword `public` before defining the respective member variables. `public` is an example of an access specifier which states what level of access other classes can access an object's data.
 
@@ -848,7 +848,7 @@ Using the pointer is the same as a raw pointer.
 
 The raw pointer needs to be paired with a delete call later while the smart pointer here is cleaned up by the smart pointer's destructor.
 
-#TL;DR
+# TL;DR
 
 Important concepts to understand. Please don't follow this list dogmatically, there are always edge cases where these rules don't apply. 
 
