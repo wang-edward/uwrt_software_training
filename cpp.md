@@ -12,14 +12,14 @@ Questions and Feedback can be directed to andrewzhao_, eady or mollaATime on dis
 ### List of Concepts in this Guide
 
 - [Vectors](https://github.com/wang-edward/uwrt_software_training/blob/cpp_setup/cpp.md#vectors)
-- `auto` type
-- Lambda functions
-- Iterable for loops
-- Memory (review)
-- Object Oriented Programming (review)
-- Smart Pointers
-- Templates
-- TL;DR
+- [`auto` type](https://github.com/wang-edward/uwrt_software_training/blob/cpp_setup/cpp.md#auto-keyword)
+- [Lambda functions](https://github.com/wang-edward/uwrt_software_training/blob/cpp_setup/cpp.md#lambda-functions)
+- [Iterable for loops](https://github.com/wang-edward/uwrt_software_training/blob/cpp_setup/cpp.md#iterable-for-loops)
+- [Templates](https://github.com/wang-edward/uwrt_software_training/blob/cpp_setup/cpp.md#templates)
+- [Memory (review)](https://github.com/wang-edward/uwrt_software_training/blob/cpp_setup/cpp.md#memory)
+- [Object Oriented Programming (review)](https://github.com/wang-edward/uwrt_software_training/blob/cpp_setup/cpp.md#object-oriented-programming)
+- [Smart Pointers](https://github.com/wang-edward/uwrt_software_training/blob/cpp_setup/cpp.md#object-oriented-programming)
+- [TL;DR](https://github.com/wang-edward/uwrt_software_training/blob/cpp_setup/cpp.md#tldr)
 
 # Vectors
 
