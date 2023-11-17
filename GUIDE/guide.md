@@ -9,7 +9,6 @@ General format:
 - Extra reading sections aren't necessary
 
 ### Todo
-- composition tutorial
 - Finish prerequisites
 - add extra reading
 
