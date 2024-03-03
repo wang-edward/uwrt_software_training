@@ -53,18 +53,20 @@ We want to make a client that sends requests to this server that tells it to kil
 
 #### Class
 ```cpp
-public: 
-clear_turtles(const rclcpp::NodeOptions &options);
-
-private:
-// the client to send requests with
-rclcpp::Client<turtlesim::srv::Kill>::SharedPtr client;
-
-// all the turtles
-std::vector<std::string> turtle_names = {"moving_turtle", "stationary turtle"};
-
-// function that sends the kill requests
-void kill();
+class p1_clear : public rclcpp::Node {
+  public: 
+  p1_clear(const rclcpp::NodeOptions &options);
+  
+  private:
+  // the client to send requests with
+  rclcpp::Client<turtlesim::srv::Kill>::SharedPtr client;
+  
+  // all the turtles
+  std::vector<std::string> turtle_names = {"moving_turtle", "stationary turtle"};
+  
+  // function that sends the kill requests
+  void kill();
+};
 ```
 
 #### Implementation
@@ -77,7 +79,7 @@ kill()
     for (auto name : turtle_names) {
         // create a message that holds the kill request (get the type right)
         // set the name field of the message
-        // create a callback (kind of difficult so you can copy paste)
+        // create a callback with a lambda
         auto callback = [this](rclcpp::Client<turtlesim::srv::Kill>::SharedFuture response) -> void {
                 (void)response; // void the response since we don't need one
                 RCLCPP_INFO(this->get_logger(), "Turtle  Killed");
@@ -107,20 +109,22 @@ Create a component that moves 'turtle1' in a circular motion.
 #### Class
 
 ```cpp
-// publisher
-rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr publisher;
-
-// callback timer
-rclcpp::TimerBase::SharedPtr timer;
-
-// struct to hold a direction
-struct Triple {
-    float x, y, z;
-}
-
-// structs to hold the constant direction messages
-Triple linear{1, 0, 0};
-Triple angular{0, 0, 1};
+class p2_circle : public rclcpp::Node {
+  // publisher
+  rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr publisher;
+  
+  // callback timer
+  rclcpp::TimerBase::SharedPtr timer;
+  
+  // struct to hold a direction
+  struct Triple {
+      float x, y, z;
+  }
+  
+  // structs to hold the constant direction messages
+  Triple linear{1, 0, 0};
+  Triple angular{0, 0, 1};
+};
 ```
 
 #### Implementation 
@@ -156,29 +160,31 @@ Create a client that sends <turtlesim::srv::Spawn> messages to the turtlesim ser
 ### Code structure
 #### Class
 ```cpp
-public:
-    spawn_turtle_nodelet(const rclcpp::NodeOptions &options);
-private:
-    
-    rclcpp::Client<turtlesim::srv::Spawn>::SharedPtr client;
-    rclcpp::TimerBase::SharedPtr timer;
-    
-    static const unsigned int NUMBER_OF_TURTLES{2};
-
-    typedef struct turtle_info {
-        float x_pos;
-        float y_pos;
-        float rad;
-    } turtle_info;
-
-    std::vector<string> turtle_names{"stationary_turtle", "moving_turtle"};
-    std::vector<turtle_info> turtle_bio{{.x_pos = 5, .y_pos = 5, .rad = 0},
-                                        {.x_pos = 25, .y_pos = 10, .rad = 0}};
-
-    // map of turtle name to turtle information
-    std::map<std::string, turtle_info> turtle_description;
-
-    void spawn_turtle();
+class p3_spawn : public rclcpp::Node {
+  public:
+      spawn_turtle_nodelet(const rclcpp::NodeOptions &options);
+  private:
+      
+      rclcpp::Client<turtlesim::srv::Spawn>::SharedPtr client;
+      rclcpp::TimerBase::SharedPtr timer;
+      
+      static const unsigned int NUMBER_OF_TURTLES{2};
+  
+      typedef struct turtle_info {
+          float x_pos;
+          float y_pos;
+          float rad;
+      } turtle_info;
+  
+      std::vector<string> turtle_names{"stationary_turtle", "moving_turtle"};
+      std::vector<turtle_info> turtle_bio{{.x_pos = 5, .y_pos = 5, .rad = 0},
+                                          {.x_pos = 25, .y_pos = 10, .rad = 0}};
+  
+      // map of turtle name to turtle information
+      std::map<std::string, turtle_info> turtle_description;
+  
+      void spawn_turtle();
+};
 ```
 
 #### Implementation
