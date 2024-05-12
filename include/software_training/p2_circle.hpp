@@ -16,6 +16,11 @@ class p2_circle : public rclcpp::Node {
         p2_circle(const rclcpp::NodeOptions& options);
     private:
         // complete this code
+        rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr publisher;
+        rclcpp::TimerBase::SharedPtr timer;
+        
+        
+        
 };
 
 
